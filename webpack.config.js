@@ -1,7 +1,7 @@
 /*eslint-env node*/
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const NODE_ENV = process.argv.indexOf('--optimize-minimize') > -1;
+const NODE_ENV = process.argv.indexOf('--optimize-minimize') > -1 ? 'production' : 'development';
 
 module.exports = {
     entry: './src',
@@ -37,6 +37,7 @@ module.exports = {
             }
         ]
     },
+    devtool: 'cheap-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html'

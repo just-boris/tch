@@ -22,8 +22,8 @@ const {classes} = styles({
     }
 });
 
-function Channel({channel, active, onClick}) {
-    return <div className={cx(classes.channel, {[classes.active]: active})} onClick={() => onClick(channel.name)}>
+function Channel({channel, tabIndex, active, onClick}) {
+    return <div className={cx(classes.channel, {[classes.active]: active})} tabIndex={tabIndex} onClick={() => onClick(channel.name)}>
         <h3 className={classes.title}>[{channel.language}] {channel.display_name}</h3>
         <p className={classes.line}>{channel.status}</p>
         <p className={classes.line}>{channel.game}</p>
@@ -34,6 +34,6 @@ function Channel({channel, active, onClick}) {
 export default function Channels({channels, active, onSelect}) {
     return <div>
         <h1>Followed channels</h1>
-        {channels.map((channel) => <Channel channel={channel} active={channel.name === active} onClick={onSelect} />)}
+        {channels.map((channel, index) => <Channel channel={channel} tabIndex={index} active={channel.name === active} onClick={onSelect} />)}
     </div>
 }

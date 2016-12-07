@@ -25,6 +25,29 @@ const {classes} = styles({
     }
 });
 
+function displayError(error) {
+    const element = document.createElement('pre');
+    element.textContent = error || JSON.stringify(error);
+    element.style.border = '1px solid red';
+    element.style.padding = '10px';
+    document.body.insertBefore(element, document.body.childNodes[0]);
+}
+
+const logsEl = document.createElement('div');
+document.body.insertBefore(logsEl, document.body.childNodes[0]);
+function log(message) {
+    const entry = document.createElement('p');
+    entry.textContent = message;
+    logsEl.appendChild(entry);
+}
+
+window.onerror = (message, file, line) => {
+    displayError(`
+        ${message}
+        ${file}:${line}
+    `);
+};
+
 export default class IndexPage extends Component {
     state = {};
 
@@ -35,6 +58,7 @@ export default class IndexPage extends Component {
     };
 
     componentDidMount() {
+        document.addEventListener('keyup', event => log(event.keyCode));
         history.listen(location => {
             this.setActiveStream(getChannelName(location));
         });
@@ -48,6 +72,8 @@ export default class IndexPage extends Component {
                     this.setActiveStream(activeStream);
                 }
             });
+        }).catch(error => {
+            displayError(error.stack || error);
         });
     }
 
@@ -74,9 +100,9 @@ export default class IndexPage extends Component {
             <div className={classes.leftCol}>
                 <ChannelsList channels={follows} active={activeChannel} onSelect={this.onChannelSelect} />
             </div>
-            <div className={classes.rightCol}>
+            {activeChannel && <div className={classes.rightCol}>
                 <Stream channel={activeChannel} />
-            </div>
+            </div>}
         </div>
     }
 }

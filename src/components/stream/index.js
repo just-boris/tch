@@ -8,12 +8,20 @@ const {classes} = styles({
     embed: {
         width: '100%',
         height: '400px'
+    },
+    close: {
+        float: 'right',
+        textDecoration: 'none',
+        color: '#5778c7'
     }
 });
 
 export default function Stream({channel}) {
     return <div className={classes.wrap}>
-        <h1>Stream</h1>
+        <h1>
+            <a href="#/" className={classes.close}>Close</a>
+            Stream
+        </h1>
         <iframe
             className={classes.embed}
             src={`http://player.twitch.tv/?channel=${channel}`}
