@@ -98,7 +98,7 @@ export default class IndexPage extends Component {
         }
         return <div className={classes.layout}>
             <div className={classes.leftCol}>
-                <ChannelsList channels={follows} active={activeChannel} onSelect={this.onChannelSelect} />
+                <ChannelsList channels={follows.sort((a, b) => a.stream ? -1 : b.stream ? 1 : 0)} active={activeChannel} onSelect={this.onChannelSelect} />
             </div>
             {activeChannel && <div className={classes.rightCol}>
                 <Stream channel={activeChannel} />
