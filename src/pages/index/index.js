@@ -1,29 +1,15 @@
 import {h, Component} from 'preact';
 import {createHashHistory} from 'history';
 import ChannelsList from '../../components/channels-list';
+import KeyLogger from '../../components/keylogger';
 import Stream from '../../components/stream';
 import twitch from '../../util/twitch-client';
-import styles from '../../util/jss';
 
 const history = createHashHistory();
 
 function getChannelName(location) {
     return location.pathname.substring(1);
 }
-
-const {classes} = styles({
-    layout: {
-        display: 'flex',
-        height: '100vh'
-    },
-    leftCol: {
-        flex: 1,
-        overflowY: 'auto'
-    },
-    rightCol: {
-        flex: 2
-    }
-});
 
 function displayError(error) {
     const element = document.createElement('pre');
@@ -57,8 +43,20 @@ export default class IndexPage extends Component {
         })
     };
 
+    onKeyPress = key => {
+        const {activeChannel, follows} = this.state;
+        if(key > 48 && key < 58) {
+            const index = key - 49;
+            this.onChannelSelect(follows[index].name)
+        }
+        if(key === 48) {
+            if(activeChannel) {
+                this.onChannelSelect('/');
+            }
+        }
+    };
+
     componentDidMount() {
-        document.addEventListener('keyup', event => log(event.keyCode));
         history.listen(location => {
             this.setActiveStream(getChannelName(location));
         });
@@ -96,13 +94,17 @@ export default class IndexPage extends Component {
         if(!follows) {
             return <div>Loading...</div>
         }
-        return <div className={classes.layout}>
-            <div className={classes.leftCol}>
-                <ChannelsList channels={follows.sort((a, b) => a.stream ? -1 : b.stream ? 1 : 0)} active={activeChannel} onSelect={this.onChannelSelect} />
-            </div>
-            {activeChannel && <div className={classes.rightCol}>
-                <Stream channel={activeChannel} />
-            </div>}
+        return <div>
+            <KeyLogger onKeyPress={this.onKeyPress} />
+            {(() => {
+                if(activeChannel) {
+                    return <Stream channel={activeChannel}/>
+
+                } else {
+                    return <ChannelsList channels={follows}
+                                         onSelect={this.onChannelSelect}/>
+                }
+            })()}
         </div>
     }
 }

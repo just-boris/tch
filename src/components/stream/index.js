@@ -20,7 +20,7 @@ export default function Stream({channel}) {
     return <div className={classes.wrap}>
         <h1>
             <a href="#/" className={classes.close}>Close</a>
-            Stream
+            Stream: {channel}
         </h1>
         <iframe
             className={classes.embed}
