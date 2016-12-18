@@ -1,4 +1,6 @@
 import {h} from 'preact';
+import {Link, route} from 'preact-router';
+import KeyLogger from '../../components/keylogger';
 import styles from '../../util/jss';
 
 const {classes} = styles({
@@ -17,9 +19,15 @@ const {classes} = styles({
 });
 
 export default function Stream({channel}) {
+    function onKeyPress(key) {
+        if(key === 48) {
+            route('/')
+        }
+    }
     return <div className={classes.wrap}>
+        <KeyLogger onKeyPress={onKeyPress}/>
         <h1>
-            <a href="#/" className={classes.close}>Close</a>
+            <Link href="/" className={classes.close}>Close</Link>
             Stream: {channel}
         </h1>
         <iframe
