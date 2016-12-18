@@ -27,7 +27,7 @@ export default function Stream({channel}) {
     return <div className={classes.wrap}>
         <KeyLogger onKeyPress={onKeyPress}/>
         <h1>
-            <Link href="/" className={classes.close}>Close</Link>
+            <Link href="/" className={classes.close}>[0] Close</Link>
             Stream: {channel}
         </h1>
         <iframe

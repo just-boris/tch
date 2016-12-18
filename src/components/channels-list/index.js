@@ -31,7 +31,9 @@ const {classes} = styles({
         fontSize: 42,
         fontWeight: 'bold',
         width: 48,
-        textAlign: 'center',
+        textAlign: 'center'
+    },
+    numberOnline: {
         background: vars.overlay
     },
     logo: {
@@ -40,7 +42,7 @@ const {classes} = styles({
     logoWrap: {
         fontSize: 0
     },
-    offline: {
+    logoOffline: {
         opacity: 0.6
     },
     info: {
@@ -51,6 +53,15 @@ const {classes} = styles({
         right: vars.padSize,
         background: vars.overlay,
         overflow: 'hidden'
+    },
+    online: {
+        width: '0.8em',
+        height: '0.8em',
+        display: 'inline-block',
+        background: '#21de48',
+        borderRadius: '50%',
+        verticalAlign: 'middle',
+        marginRight: '0.5em'
     },
     game: {
         textAlign: 'center',
@@ -71,12 +82,15 @@ const {classes} = styles({
 
 function Channel({channel, tabIndex, onClick}) {
     return <div className={classes.channel} onClick={() => onClick(channel.name)}>
-        <div className={classes.number}>{tabIndex + 1}</div>
+        <div className={cx(classes.number, {[classes.numberOnline]: channel.stream})}>{tabIndex + 1}</div>
         <div className={classes.logoWrap}>
-            <img src={channel.logo} alt="logo" className={cx(classes.logo, {[classes.offline]: !channel.stream})} />
+            <img src={channel.logo} alt="logo" className={cx(classes.logo, {[classes.logoOffline]: !channel.stream})} />
         </div>
         <div className={classes.info}>
-            <h3 className={cx(classes.line, classes.title)}>[{channel.language}] {channel.display_name}</h3>
+            <h3 className={cx(classes.line, classes.title)}>
+                {channel.stream && <span className={classes.online}></span>}
+                {channel.display_name}
+            </h3>
             <p className={cx(classes.line, classes.game)}>{channel.game}</p>
         </div>
     </div>
